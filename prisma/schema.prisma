@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js" // Ajustado al estándar
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Dim_Date {
+  sk_date     String  @id // Agregamos @id
+  order_date  String?
+  day         String?
+  month       String?
+  month_name  String?
+  year        String?
+  day_of_week String?
+}
+
+model Dim_Location {
+  sk_location String  @id // Agregamos @id
+  location_id String?
+  city        String?
+}
+
+model Dim_Pizza {
+  sk_pizza      String  @id // Agregamos @id
+  pizza_id      String?
+  sk_pizza_type String?
+  size          String?
+  price         String?
+}
+
+model Dim_Pizza_Type {
+  sk_pizza_type String  @id // Agregamos @id
+  pizza_type_id String?
+  name          String?
+  category      String?
+  ingredients   String?
+}
+
+model Dim_Time {
+  sk_time   String  @id // Agregamos @id
+  time      String?
+  hour      String?
+  time_slot String?
+}
+
+model Fact_Sales {
+  order_details_id String  @id // Agregamos @id aquí como PK
+  order_id         String?
+  sk_pizza         String?
+  sk_location      String?
+  sk_date          String?
+  sk_time          String?
+  quantity         String?
+  unit_price       String?
+  total_price      String?
+}
