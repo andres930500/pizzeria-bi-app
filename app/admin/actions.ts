@@ -3,7 +3,6 @@
 import { randomUUID } from "crypto";
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
 
 type ActionResult = {
   ok?: boolean;
@@ -83,7 +82,7 @@ export async function createPizza(
   let result: ActionResult = { ok: false };
 
   try {
-    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+    await prisma.$transaction(async (tx) => {
       const existingType = await tx.dim_Pizza_Type.findFirst({
         where: {
           name: {
