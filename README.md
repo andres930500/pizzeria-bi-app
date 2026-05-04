@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pizzería BI
 
-## Getting Started
+Proyecto de un **taller de inteligencia de negocios** enfocado en la gestión de una pizzería. Esta aplicación permite registrar ventas, administrar el catálogo y visualizar indicadores clave en un dashboard.
 
-First, run the development server:
+## Características
+
+- Registro de ventas en tiempo real con validaciones de precios y cantidades.
+- Panel de BI con KPIs, tendencias y top de pizzas.
+- Gestión de catálogo (sabores, tamaños, precios) y sedes.
+- Integración con PostgreSQL vía Prisma.
+
+## Stack
+
+- Next.js (App Router)
+- React + TypeScript
+- Tailwind CSS
+- Prisma + PostgreSQL
+
+## Requisitos
+
+- Node.js 18+ (o compatible)
+- Base de datos PostgreSQL
+
+## Configuración
+
+1. Crea un archivo `.env` con la variable `DATABASE_URL` apuntando a tu PostgreSQL.
+2. Instala dependencias:
+
+```bash
+npm install
+```
+
+3. Ejecuta el proyecto en desarrollo:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Estructura principal
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `app/` rutas y vistas
+- `app/admin/` panel de administración
+- `app/ventas/` registro de ventas
+- `app/dashboard/` indicadores de BI
+- `lib/prisma.ts` cliente de Prisma
+- `prisma/schema.prisma` modelo de datos
 
-## Learn More
+## Despliegue en Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Importa el repositorio en Vercel.
+2. Agrega `DATABASE_URL` en **Settings > Environment Variables**.
+3. Haz deploy.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Notas de seguridad
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No subas `.env` al repositorio.
+- Rota credenciales si alguna clave se ha compartido.
