@@ -3,7 +3,7 @@ import { VentasForm } from "./ventas-form";
 
 export default async function VentasPage() {
   const [pizzas, locations, recentSales] = await Promise.all([
-    prisma.Dim_Pizza.findMany({
+    prisma.dim_Pizza.findMany({
       select: {
         sk_pizza: true,
         pizza_id: true,
@@ -12,7 +12,7 @@ export default async function VentasPage() {
       },
       orderBy: { pizza_id: "asc" },
     }),
-    prisma.Dim_Location.findMany({
+    prisma.dim_Location.findMany({
       select: {
         sk_location: true,
         city: true,
@@ -20,7 +20,7 @@ export default async function VentasPage() {
       },
       orderBy: { city: "asc" },
     }),
-    prisma.Fact_Sales.findMany({
+    prisma.fact_Sales.findMany({
       select: {
         order_details_id: true,
         sk_pizza: true,

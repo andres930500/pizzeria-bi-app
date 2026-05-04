@@ -41,7 +41,7 @@ export async function createSale(
     return { ok: false, error: "Quantity must be greater than zero." };
   }
 
-  const pizza = await prisma.Dim_Pizza.findUnique({
+  const pizza = await prisma.dim_Pizza.findUnique({
     where: { sk_pizza },
     select: { price: true },
   });
@@ -61,7 +61,7 @@ export async function createSale(
   const sk_date = getDateKey(now);
   const sk_time = getTimeKey(now);
 
-  await prisma.Fact_Sales.create({
+  await prisma.fact_Sales.create({
     data: {
       order_details_id: randomUUID(),
       sk_pizza,

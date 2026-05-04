@@ -30,7 +30,7 @@ function getGreeting(date: Date) {
 export default async function Home() {
   const now = new Date();
   const todayKey = getDateKey(now);
-  const salesToday = await prisma.Fact_Sales.findMany({
+  const salesToday = await prisma.fact_Sales.findMany({
     where: { sk_date: todayKey },
     select: { total_price: true },
   });

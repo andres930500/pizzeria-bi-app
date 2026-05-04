@@ -1,7 +1,7 @@
 "use client";
 
 import { Combobox } from "@headlessui/react";
-import { useEffect, useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 import { createPizza } from "./actions";
 
 type PizzaTypeOption = {
@@ -22,6 +22,13 @@ type CatalogFormProps = {
   existingSizesByType: Record<string, string[]>;
   categoryOptions: CategoryOption[];
 };
+
+type CreatePizzaState = {
+  ok?: boolean;
+  error?: string;
+};
+
+const initialState: CreatePizzaState = {};
 
 const sizeOptions = [
   { value: "S", label: "S (Personal)" },
@@ -59,6 +66,7 @@ export function CatalogForm({
   existingSizesByType,
   categoryOptions,
 }: CatalogFormProps) {
+  const [state, formAction] = useActionState(createPizza, initialState);
   const [typeName, setTypeName] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
   const [customIngredients, setCustomIngredients] = useState("");
@@ -133,7 +141,7 @@ export function CatalogForm({
   const categoryId = selectedCategory?.id ?? "";
 
   return (
-    <form action={createPizza} className="mt-6 grid gap-4">
+    <form action={formAction} className="mt-6 grid gap-4">
       <label className="flex flex-col gap-2 text-sm font-semibold text-slate-700">
         Codigo de pizza
         <input
@@ -293,6 +301,9 @@ export function CatalogForm({
         <p className="text-sm font-semibold text-rose-600">
           Esta combinacion de sabor y tamano ya existe en el catalogo.
         </p>
+      ) : null}
+      {state.ok === false && state.error ? (
+        <p className="text-sm font-semibold text-rose-600">{state.error}</p>
       ) : null}
       <button
         type="submit"

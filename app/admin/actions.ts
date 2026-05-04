@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
 type ActionResult = {
-  ok: boolean;
+  ok?: boolean;
   error?: string;
 };
 
@@ -21,19 +21,17 @@ function normalizePizzaId(name: string, size: string) {
   return `${slug || "pizza"}_${sizeToken}`;
 }
 
-export async function createLocation(
-  formData: FormData,
-): Promise<ActionResult> {
+export async function createLocation(formData: FormData): Promise<void> {
   const city = String(formData.get("city") ?? "").trim();
 
   if (!city) {
-    return { ok: false, error: "La ciudad es requerida." };
+    return;
   }
 
   const sk_location = randomUUID();
   const location_id = `LOC-${sk_location.slice(0, 8)}`;
 
-  await prisma.Dim_Location.create({
+  await prisma.dim_Location.create({
     data: {
       sk_location,
       location_id,
@@ -45,10 +43,13 @@ export async function createLocation(
   revalidatePath("/ventas");
   revalidatePath("/dashboard");
 
-  return { ok: true };
+  return;
 }
 
-export async function createPizza(formData: FormData): Promise<ActionResult> {
+export async function createPizza(
+  _prevState: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> {
   const size = String(formData.get("size") ?? "").trim();
   const price = String(formData.get("price") ?? "").trim();
   const pizzaTypeName = String(formData.get("pizza_type_name") ?? "").trim();
@@ -82,7 +83,7 @@ export async function createPizza(formData: FormData): Promise<ActionResult> {
 
   try {
     await prisma.$transaction(async (tx) => {
-      const existingType = await tx.Dim_Pizza_Type.findFirst({
+      const existingType = await tx.dim_Pizza_Type.findFirst({
         where: {
           name: {
             equals: pizzaTypeName,
@@ -98,7 +99,7 @@ export async function createPizza(formData: FormData): Promise<ActionResult> {
         sk_pizza_type = randomUUID();
         const pizza_type_id = `TYPE-${sk_pizza_type.slice(0, 8)}`;
 
-        await tx.Dim_Pizza_Type.create({
+        await tx.dim_Pizza_Type.create({
           data: {
             sk_pizza_type,
             pizza_type_id,
@@ -109,7 +110,7 @@ export async function createPizza(formData: FormData): Promise<ActionResult> {
         });
       }
 
-      const existingPizza = await tx.Dim_Pizza.findFirst({
+      const existingPizza = await tx.dim_Pizza.findFirst({
         where: {
           sk_pizza_type,
           size,
@@ -128,7 +129,7 @@ export async function createPizza(formData: FormData): Promise<ActionResult> {
       const sk_pizza = randomUUID();
       const generatedPizzaId = normalizePizzaId(pizzaTypeName, size);
 
-      await tx.Dim_Pizza.create({
+      await tx.dim_Pizza.create({
         data: {
           sk_pizza,
           pizza_id: generatedPizzaId,
@@ -172,7 +173,7 @@ export async function updatePizzaType(
     return { ok: false, error: "El nombre o sabor es requerido." };
   }
 
-  await prisma.Dim_Pizza_Type.update({
+  await prisma.dim_Pizza_Type.update({
     where: { sk_pizza_type },
     data: {
       name,
@@ -188,22 +189,20 @@ export async function updatePizzaType(
   return { ok: true };
 }
 
-export async function updatePizzaPrice(
-  formData: FormData,
-): Promise<ActionResult> {
+export async function updatePizzaPrice(formData: FormData): Promise<void> {
   const sk_pizza = String(formData.get("sk_pizza") ?? "").trim();
   const price = String(formData.get("price") ?? "").trim();
 
   if (!sk_pizza) {
-    return { ok: false, error: "Pizza invalida." };
+    return;
   }
 
   const priceValue = Number(price);
   if (!Number.isFinite(priceValue) || priceValue <= 0) {
-    return { ok: false, error: "El precio debe ser mayor que cero." };
+    return;
   }
 
-  await prisma.Dim_Pizza.update({
+  await prisma.dim_Pizza.update({
     where: { sk_pizza },
     data: { price: String(priceValue) },
   });
@@ -212,36 +211,34 @@ export async function updatePizzaPrice(
   revalidatePath("/ventas");
   revalidatePath("/dashboard");
 
-  return { ok: true };
+  return;
 }
 
-export async function deletePizza(formData: FormData): Promise<ActionResult> {
+export async function deletePizza(formData: FormData): Promise<void> {
   const sk_pizza = String(formData.get("sk_pizza") ?? "").trim();
 
   if (!sk_pizza) {
-    return { ok: false, error: "Pizza invalida." };
+    return;
   }
 
-  await prisma.Dim_Pizza.delete({
+  await prisma.dim_Pizza.delete({
     where: { sk_pizza },
   });
 
   revalidatePath("/admin");
   revalidatePath("/ventas");
 
-  return { ok: true };
+  return;
 }
 
-export async function deleteLocation(
-  formData: FormData,
-): Promise<ActionResult> {
+export async function deleteLocation(formData: FormData): Promise<void> {
   const sk_location = String(formData.get("sk_location") ?? "").trim();
 
   if (!sk_location) {
-    return { ok: false, error: "Sede invalida." };
+    return;
   }
 
-  await prisma.Dim_Location.delete({
+  await prisma.dim_Location.delete({
     where: { sk_location },
   });
 
@@ -249,5 +246,5 @@ export async function deleteLocation(
   revalidatePath("/ventas");
   revalidatePath("/dashboard");
 
-  return { ok: true };
+  return;
 }

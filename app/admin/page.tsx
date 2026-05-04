@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const [locations, pizzas, pizzaTypes] = await Promise.all([
-    prisma.Dim_Location.findMany({
+    prisma.dim_Location.findMany({
       select: {
         sk_location: true,
         location_id: true,
@@ -21,7 +21,7 @@ export default async function AdminPage() {
       },
       orderBy: { city: "asc" },
     }),
-    prisma.Dim_Pizza.findMany({
+    prisma.dim_Pizza.findMany({
       select: {
         sk_pizza: true,
         pizza_id: true,
@@ -31,7 +31,7 @@ export default async function AdminPage() {
       },
       orderBy: { pizza_id: "asc" },
     }),
-    prisma.Dim_Pizza_Type.findMany({
+    prisma.dim_Pizza_Type.findMany({
       select: {
         sk_pizza_type: true,
         pizza_type_id: true,

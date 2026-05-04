@@ -31,7 +31,7 @@ export default async function DashboardPage({
   unstable_noStore();
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const [sales, locations, pizzas, pizzaTypes] = await Promise.all([
-    prisma.Fact_Sales.findMany({
+    prisma.fact_Sales.findMany({
       select: {
         sk_location: true,
         sk_pizza: true,
@@ -40,20 +40,21 @@ export default async function DashboardPage({
         total_price: true,
       },
     }),
-    prisma.Dim_Location.findMany({
+    prisma.dim_Location.findMany({
       select: {
         sk_location: true,
         city: true,
         location_id: true,
       },
     }),
-    prisma.Dim_Pizza.findMany({
+    prisma.dim_Pizza.findMany({
       select: {
         sk_pizza: true,
         sk_pizza_type: true,
+        pizza_id: true,
       },
     }),
-    prisma.Dim_Pizza_Type.findMany({
+    prisma.dim_Pizza_Type.findMany({
       select: {
         sk_pizza_type: true,
         category: true,
